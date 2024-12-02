@@ -35,6 +35,8 @@ const fetchPolls = async () => {
   }
 }
 
+const formatSlug = (id: bigint) => `/poll/${id}`
+
 onMounted(() => {
   fetchPolls()
 })
@@ -86,10 +88,11 @@ onMounted(() => {
 
     <!-- Polls Grid -->
     <div v-else class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <div
+      <NuxtLink
         v-for="poll in polls"
         :key="String(poll.id)"
-        class="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-colors"
+        :to="formatSlug(poll.id)"
+        class="block bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-primary-500/50 hover:shadow-lg hover:shadow-primary-500/5 transition-all"
       >
         <div class="space-y-4">
           <!-- Title -->
@@ -123,7 +126,7 @@ onMounted(() => {
             ></div>
           </div>
         </div>
-      </div>
+      </NuxtLink>
     </div>
   </div>
 </template> 
