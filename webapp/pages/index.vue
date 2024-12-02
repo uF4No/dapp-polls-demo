@@ -10,7 +10,7 @@ interface Poll {
   optionTwoVotes: bigint
 }
 
-const { getAllPolls } = usePollContract()
+const pollContract = await usePollContract()
 const polls = ref<Poll[]>([])
 const loading = ref(true)
 
@@ -26,7 +26,8 @@ const isActive = (deadline: bigint) => {
 const fetchPolls = async () => {
   loading.value = true
   try {
-    polls.value = await getAllPolls()
+    polls.value = await pollContract.getAllPolls()
+    console.log('polls :>> ', polls.value)
   } catch (error) {
     console.error('Error:', error)
   } finally {
@@ -37,6 +38,8 @@ const fetchPolls = async () => {
 onMounted(() => {
   fetchPolls()
 })
+
+
 </script>
 
 <template>
@@ -46,6 +49,15 @@ onMounted(() => {
         Welcome to Polls
       </h2>
       <p class="mt-4 text-lg text-gray-400">Create and participate in decentralized polls</p>
+      <div class="mt-6">
+        <NuxtLink
+          to="/create"
+          class="inline-flex items-center gap-2 px-6 py-3 font-medium bg-primary-500 text-white rounded-lg shadow-lg shadow-primary-500/20 hover:bg-primary-600 hover:shadow-primary-600/20 transition-all active:transform active:scale-95"
+        >
+          <Icon name="heroicons:plus-circle" class="w-5 h-5" />
+          Create new Poll
+        </NuxtLink>
+      </div>
     </header>
 
     <!-- Loading State -->
@@ -61,6 +73,14 @@ onMounted(() => {
         </svg>
         <h3 class="mt-4 text-xl font-medium text-gray-300">No open polls yet</h3>
         <p class="mt-2 text-gray-400">Be the first one to create a poll!</p>
+        
+        <NuxtLink
+          to="/create"
+          class="inline-flex items-center gap-2 px-6 py-3 font-medium bg-primary-500 text-white rounded-lg shadow-lg shadow-primary-500/20 hover:bg-primary-600 hover:shadow-primary-600/20 transition-all active:transform active:scale-95"
+        >
+          <Icon name="heroicons:plus-circle" class="w-5 h-5" />
+          Create new Poll
+        </NuxtLink>
       </div>
     </div>
 

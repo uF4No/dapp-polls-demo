@@ -3,7 +3,7 @@ import { defineNuxtConfig } from 'nuxt/config'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@wagmi/vue/nuxt', '@nuxtjs/tailwindcss'],
+  modules: ['@wagmi/vue/nuxt', '@nuxtjs/tailwindcss', 'nuxt-icon'],
   compatibilityDate: '2024-11-29',
   pages: true,
   runtimeConfig: {

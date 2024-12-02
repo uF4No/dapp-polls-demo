@@ -1,5 +1,7 @@
-import { createPublicClient, createWalletClient, http } from 'viem'
+import { createPublicClient, http,  } from 'viem'
 import { zksyncSepoliaTestnet } from '@wagmi/core/chains'
+import {getAccount, writeContract, waitForTransactionReceipt} from "@wagmi/core"
+import {config} from "../wagmi"
 
 const CONTRACT_ADDRESS = '0x83fb0FF9650D534E336bE2f885dE9C93408aF2F0'
 
@@ -37,12 +39,52 @@ const ABI = [
   }
 ] as const
 
+interface CreatePollParams {
+  title: string
+  optionOne: string
+  optionTwo: string
+  durationInMinutes: bigint
+}
+
 export async function usePollContract() {
   
   const publicClient = createPublicClient({
     chain: zksyncSepoliaTestnet,
     transport: http('https://sepolia.era.zksync.dev')
   })
+
+
+  const createPoll = async({ title, optionOne, optionTwo, durationInMinutes }: CreatePollParams) => { 
+    try {
+      console.log('Creating poll with params:', { title, optionOne, optionTwo, durationInMinutes })
+      
+      const hash = await writeContract(config, {
+        address: CONTRACT_ADDRESS,
+        abi: ABI,
+        functionName: 'createPoll',
+        args: [title, optionOne, optionTwo, durationInMinutes]
+      })
+      
+      console.log('Transaction hash:', hash)
+      
+      const receipt = await waitForTransactionReceipt(config, { 
+        hash,
+        timeout: 60_000 // 60 seconds timeout
+      })
+      
+      console.log('Transaction receipt:', receipt)
+      
+      if (receipt.status === 'reverted') {
+        throw new Error('Transaction reverted')
+      }
+
+      return receipt
+    } catch (error) {
+      console.error('Error in createPoll:', error)
+      throw error
+    }
+  }
+
 
   const getAllPolls = async () => {
     try {
@@ -51,6 +93,7 @@ export async function usePollContract() {
         abi: ABI,
         functionName: 'getAllPolls',
       })
+      console.log('polls :>> ', polls)
       return polls
     } catch (error) {
       console.error('Error fetching polls:', error)
@@ -59,6 +102,6 @@ export async function usePollContract() {
   }
 
   return {
-    getAllPolls
+    getAllPolls, createPoll
   }
 } 

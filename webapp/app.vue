@@ -1,11 +1,20 @@
 <template>
   <div class="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-gray-100">
     <Navbar />
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <main class="container mx-auto px-4 py-8">
       <NuxtPage />
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+// Ensure consistent styling between server and client
+useHead({
+  bodyAttrs: {
+    class: 'bg-gray-900'
+  }
+})
+</script>
 
 <style>
 body {
