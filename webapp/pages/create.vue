@@ -144,7 +144,7 @@ const handleSubmit = async () => {
           <button
             type="submit"
             :disabled="isSubmitting"
-            class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            class="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             <span v-if="isSubmitting" class="inline-block animate-spin rounded-full h-4 w-4 border-2 border-white/20 border-t-white"></span>
             {{ isSubmitting ? 'Creating...' : 'Create Poll' }}

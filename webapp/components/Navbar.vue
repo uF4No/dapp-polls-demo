@@ -46,7 +46,7 @@ const navigateToHome = () => {
             @click="navigateToHome" 
             class="text-xl font-bold text-primary-500 cursor-pointer hover:text-primary-400 transition-colors"
           >
-            Polls demo app
+            ZKPolls
           </h1>
         </div>
         

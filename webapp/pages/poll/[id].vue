@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useAccount } from '@wagmi/vue';
 interface Poll {
   id: bigint
   title: string
@@ -11,6 +12,7 @@ interface Poll {
 }
 
 const route = useRoute()
+const { address } = useAccount()
 const pollContract = await usePollContract()
 const { data: poll, pending } = await useAsyncData<Poll>(
   `poll-${route.params.id}`,
@@ -39,6 +41,11 @@ const vote = async (option: 1 | 2) => {
   error.value = ''
   
   try {
+    console.log(poll.value.owner.toLowerCase(), address.value?.toLowerCase())
+    if (poll.value.owner.toLowerCase() === address.value?.toLowerCase()) {
+      error.value = 'You cannot vote on your own poll.'
+      return
+    }
     await pollContract.vote(poll.value.id, option)
     // Refresh poll data after voting
     await refreshNuxtData(`poll-${route.params.id}`)

@@ -48,7 +48,7 @@ onMounted(() => {
   <div class="space-y-12">
     <header class="text-center">
       <h2 class="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-        Welcome to Polls
+        Welcome to ZK Polls
       </h2>
       <p class="mt-4 text-lg text-gray-400">Create and participate in decentralized polls</p>
       <div class="mt-6">
