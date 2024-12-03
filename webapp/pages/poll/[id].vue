@@ -102,39 +102,34 @@ const getVotePercentage = (votes: bigint) => {
 
           <!-- Voting Options -->
           <div class="space-y-4">
-            <button
-              @click="vote(1)"
-              :disabled="!isActive(poll.deadline) || loading"
-              class="w-full p-4 bg-gray-700/50 rounded-lg hover:bg-primary-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            <div v-for="(option, index) in [1, 2]" :key="index"
+              class="flex gap-4 items-center"
             >
-              <div class="flex justify-between items-center">
-                <span>{{poll.optionOne}}</span>
-                <span>{{ getVotePercentage(poll.optionOneVotes) }}%</span>
+              <div class="flex-1 p-4 bg-gray-700/50 rounded-lg">
+                <div class="flex justify-between items-center">
+                  <span>{{ index === 0 ? poll.optionOne : poll.optionTwo }}</span>
+                  <span>{{ getVotePercentage(index === 0 ? poll.optionOneVotes : poll.optionTwoVotes) }}%</span>
+                </div>
+                <div class="mt-2 w-full bg-gray-700 rounded-full h-2.5">
+                  <div
+                    class="bg-primary-500 h-2.5 rounded-full transition-all"
+                    :style="{ width: `${getVotePercentage(index === 0 ? poll.optionOneVotes : poll.optionTwoVotes)}%` }"
+                  />
+                </div>
               </div>
-              <div class="mt-2 w-full bg-gray-700 rounded-full h-2.5">
-                <div
-                  class="bg-primary-500 h-2.5 rounded-full transition-all"
-                  :style="{ width: `${getVotePercentage(poll.optionOneVotes)}%` }"
-                />
-              </div>
-            </button>
 
-            <button
-              @click="vote(2)"
-              :disabled="!isActive(poll.deadline) || loading"
-              class="w-full p-4 bg-gray-700/50 rounded-lg hover:bg-primary-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <div class="flex justify-between items-center">
-                <span>{{poll.optionTwo}}</span>
-                <span>{{ getVotePercentage(poll.optionTwoVotes) }}%</span>
-              </div>
-              <div class="mt-2 w-full bg-gray-700 rounded-full h-2.5">
-                <div
-                  class="bg-primary-500 h-2.5 rounded-full transition-all"
-                  :style="{ width: `${getVotePercentage(poll.optionTwoVotes)}%` }"
+              <button
+                @click="vote(option)"
+                :disabled="!isActive(poll.deadline) || loading"
+                class="h-full aspect-square p-4 bg-gray-700/50 rounded-lg hover:bg-primary-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Icon 
+                  name="material-symbols:how-to-vote" 
+                  class="text-xl text-primary-500"
+                  :class="{ 'animate-spin': loading }"
                 />
-              </div>
-            </button>
+              </button>
+            </div>
           </div>
 
           <!-- Error Message -->

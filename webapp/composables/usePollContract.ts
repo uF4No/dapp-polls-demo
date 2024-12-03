@@ -3,7 +3,7 @@ import { zksyncSepoliaTestnet } from '@wagmi/core/chains'
 import {getAccount, writeContract, waitForTransactionReceipt} from "@wagmi/core"
 import {config} from "../wagmi"
 
-const CONTRACT_ADDRESS = '0x83fb0FF9650D534E336bE2f885dE9C93408aF2F0'
+const CONTRACT_ADDRESS = '0xe888F8eDfd68F66c2a10AB1da561Cacb99AD9293'
 
 const ABI = [
     {

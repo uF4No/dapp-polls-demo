@@ -5,10 +5,10 @@ Build: `forge build --zksync`
 Deployment: `forge create --rpc-url zksync_era_sepolia --account myKeystore src/Poll.sol:PollContract --zksync`
 
 Deployer: 0x466ff3c5C76445823b49dF047d72663B8eAe9272
-Deployed to: 0x83fb0FF9650D534E336bE2f885dE9C93408aF2F0
-Transaction hash: 0xb77d5fa5b3af5fa8074828b67b76fb6e7a322d151de13284288506f5386cbe02
+Deployed to: 0xe888F8eDfd68F66c2a10AB1da561Cacb99AD9293
+Transaction hash: 0x5fb3c63b1cc065b0272bc014bc4f772e3288ee16facff6b20850fa9d73b002ae
 
-Verification: `forge verify-contract 0x83fb0FF9650D534E336bE2f885dE9C93408aF2F0 src/Poll.sol:PollContract --zksync --verifier zksync --verifier-url https://explorer.sepolia.era.zksync.dev/contract_verification`
+Verification: `forge verify-contract 0xe888F8eDfd68F66c2a10AB1da561Cacb99AD9293 src/Poll.sol:PollContract --zksync --verifier zksync --verifier-url https://explorer.sepolia.era.zksync.dev/contract_verification`
 
 ## Frontend
 
