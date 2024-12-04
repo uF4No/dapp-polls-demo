@@ -43,7 +43,7 @@ const accountType = computed(() => {
   }
   return {
     label: 'Regular Account',
-    description: 'This is a regular externally owned account (EOA)',
+    description: 'This is a regular account (EOA).',
     class: 'text-green-400'
   }
 })

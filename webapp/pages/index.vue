@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useAccount } from '@wagmi/vue'
 
 interface Poll {
   id: bigint
@@ -10,6 +11,7 @@ interface Poll {
   optionTwoVotes: bigint
 }
 
+const { address, status } = useAccount()
 const pollContract = await usePollContract()
 const polls = ref<Poll[]>([])
 const loading = ref(true)
@@ -40,8 +42,6 @@ const formatSlug = (id: bigint) => `/poll/${id}`
 onMounted(() => {
   fetchPolls()
 })
-
-
 </script>
 
 <template>
@@ -51,7 +51,7 @@ onMounted(() => {
         Welcome to ZK Polls
       </h2>
       <p class="mt-4 text-lg text-gray-400">Create and participate in decentralized polls</p>
-      <div class="mt-6">
+      <div class="mt-6" v-if="status === 'connected'">
         <NuxtLink
           to="/create"
           class="inline-flex items-center gap-2 px-6 py-3 font-medium bg-primary-500 text-white rounded-lg shadow-lg shadow-primary-500/20 hover:bg-primary-600 hover:shadow-primary-600/20 transition-all active:transform active:scale-95"
@@ -77,6 +77,7 @@ onMounted(() => {
         <p class="mt-2 text-gray-400">Be the first one to create a poll!</p>
         
         <NuxtLink
+          v-if="status === 'connected'"
           to="/create"
           class="inline-flex items-center gap-2 px-6 py-3 font-medium bg-primary-500 text-white rounded-lg shadow-lg shadow-primary-500/20 hover:bg-primary-600 hover:shadow-primary-600/20 transition-all active:transform active:scale-95"
         >
@@ -91,8 +92,12 @@ onMounted(() => {
       <NuxtLink
         v-for="poll in polls"
         :key="String(poll.id)"
-        :to="formatSlug(poll.id)"
-        class="block bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 hover:border-primary-500/50 hover:shadow-lg hover:shadow-primary-500/5 transition-all"
+        :to="status === 'connected' ? formatSlug(poll.id) : '#'"
+        :class="[
+          'block bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/50 transition-all',
+          status === 'connected' ? 'hover:border-primary-500/50 hover:shadow-lg hover:shadow-primary-500/5' : 'cursor-not-allowed opacity-80'
+        ]"
+        :aria-disabled="status !== 'connected'"
       >
         <div class="space-y-4">
           <!-- Title -->
