@@ -50,9 +50,15 @@ const vote = async (option: 1 | 2) => {
       error.value = 'You cannot vote on your own poll.'
       return
     }
-    await pollContract.vote(poll.value.id, option)
+    const receipt = await pollContract.vote(poll.value.id, option)
     // Refresh poll data after voting
-    await refreshNuxtData(`poll-${route.params.id}`)
+    console.log('Transaction receipt:', receipt)
+    
+    if (receipt.status === 'success') {
+      await refreshNuxtData(`poll-${route.params.id}`)
+    }else {
+      throw new Error('Transaction failed')
+    }
   } catch (err) {
     error.value = 'Failed to submit vote. Please try again.'
     console.error(err)
