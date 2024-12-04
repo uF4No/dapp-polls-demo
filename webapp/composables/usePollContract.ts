@@ -374,9 +374,7 @@ export async function usePollContract() {
         hash,
         timeout: 60_000 // 60 seconds timeout
       })
-      
-      console.log('Transaction receipt:', receipt)
-      
+            
       if (receipt.status === 'reverted') {
         throw new Error('Transaction reverted')
       }
@@ -415,12 +413,35 @@ export async function usePollContract() {
     return poll
   }
   const vote = async (pollId: bigint, option: 1 | 2) => {
-    await writeContract(config, {
-      address: CONTRACT_ADDRESS,
-      abi: ABI,
-      functionName: 'vote',
-      args: [pollId, option]
-    })
+    console.log('voting on poll ', pollId, 'with option', option)
+    
+    try {
+      const account = getAccount(config)
+      console.log('account :>> ', account);
+      
+      // Standard connector path
+      const hash = await writeContract(config, {
+        address: CONTRACT_ADDRESS,
+        abi: ABI,
+        functionName: 'vote',
+        args: [pollId, option],
+        chain: zksyncSepoliaTestnet
+      })
+      
+      const receipt = await waitForTransactionReceipt(config, {
+        hash,
+        timeout: 60_000
+      })
+      
+      if (receipt.status === 'reverted') {
+        throw new Error('Transaction reverted')
+      }
+
+      return receipt
+    } catch (error) {
+      console.error('Error in vote:', error)
+      throw error
+    }
   }
 
   return {

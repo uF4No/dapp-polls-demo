@@ -3,6 +3,7 @@ import { useAccount, useDisconnect } from '@wagmi/vue'
 import { useConnect, useChainId } from '@wagmi/vue'
 import { ref } from 'vue'
 import { navigateTo } from 'nuxt/app'
+import { connectWithSSO } from '@/wagmi'
 
 const isOpen = ref(false)
 const chainId = useChainId()
@@ -24,8 +25,16 @@ const closeDropdown = () => {
 }
 
 const handleConnect = (connector: any) => {
-  connect({ connector, chainId })
-  closeDropdown()
+  // if (connector.id === 'zksync-sso') {
+  //   console.log('connecting with sso')
+  //   connectWithSSO()
+  //   closeDropdown()
+  // }else{
+    console.log('connecting with standard connector')
+    connect({ connector, chainId })
+    closeDropdown()
+
+  // }
 }
 
 const navigateToAccount = () => {
