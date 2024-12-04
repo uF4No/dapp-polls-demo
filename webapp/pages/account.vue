@@ -1,11 +1,67 @@
 <script setup lang="ts">
 import { useAccount, useBalance } from '@wagmi/vue'
 import { useRouter } from 'vue-router'
+import { ref, onMounted, computed, watch } from 'vue'
+import { getPublicClient } from '@wagmi/core'
+import { config } from "@/wagmi"
 
 const router = useRouter()
 const { address, chainId, status } = useAccount()
 const { data: balance } = useBalance({
   address,
+})
+
+const isContract = ref(false)
+const isChecking = ref(false)
+
+// Check if address is a contract
+const checkIfContract = async () => {
+  if (!address.value) return
+  
+  isChecking.value = true
+  try {
+    const publicClient = getPublicClient(config)
+    const code = await publicClient.getCode({
+      address: address.value
+    })
+    isContract.value = code ? code.length > 2 : false
+  } catch (error) {
+    console.error('Error checking contract:', error)
+  } finally {
+    isChecking.value = false
+  }
+}
+
+const accountType = computed(() => {
+  if (!address.value) return ''
+  if (isContract.value) {
+    return {
+      label: 'Smart Contract Account',
+      description: 'This is a smart contract account (has code deployed at this address)',
+      class: 'text-blue-400'
+    }
+  }
+  return {
+    label: 'Regular Account',
+    description: 'This is a regular externally owned account (EOA)',
+    class: 'text-green-400'
+  }
+})
+
+// Watch for address changes
+watch(address, (newAddress) => {
+  if (newAddress) {
+    checkIfContract()
+  } else {
+    isContract.value = false
+  }
+})
+
+// Run check when component mounts
+onMounted(() => {
+  if (address.value) {
+    checkIfContract()
+  }
 })
 
 // Redirect if not connected
@@ -30,6 +86,24 @@ const copyToClipboard = async (text: string) => {
       <h2 class="text-2xl font-bold text-gray-100 mb-6">Account Details</h2>
       
       <div class="space-y-6">
+        <!-- Account Type -->
+        <div class="space-y-2">
+          <label class="text-sm text-gray-400">Account Type</label>
+          <div class="p-3 bg-gray-900/50 rounded-lg">
+            <div v-if="isChecking" class="text-gray-400">
+              Checking account type...
+            </div>
+            <template v-else>
+              <div :class="accountType.class" class="font-medium">
+                {{ accountType.label }}
+              </div>
+              <div class="text-sm text-gray-400 mt-1">
+                {{ accountType.description }}
+              </div>
+            </template>
+          </div>
+        </div>
+
         <!-- Address -->
         <div class="space-y-2">
           <label class="text-sm text-gray-400">Address</label>
