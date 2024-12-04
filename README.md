@@ -1,6 +1,6 @@
 # ZKsync Polls Demo
 
-![](./arrows-dark-aquare.png)
+![](./zksync-dark.png)
 
 [Spanish version down below](#descripcion-general)
 
