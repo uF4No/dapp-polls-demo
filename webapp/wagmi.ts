@@ -2,13 +2,29 @@ import { http, cookieStorage, createConfig, createStorage } from '@wagmi/vue'
 import {  zksyncSepoliaTestnet } from '@wagmi/vue/chains'
 import { injected, } from '@wagmi/vue/connectors'
 import {connect} from '@wagmi/core'
-import {zksyncSsoConnector} from "zksync-sso/connector"
+import {zksyncSsoConnector, callPolicy} from "zksync-sso/connector"
+
+import {ABI, CONTRACT_ADDRESS} from "@/composables/usePollContract"
 
 const ssoConnector = zksyncSsoConnector({
   metadata:{
     name: "ZK Polls",
     icon: "https://nft.zksync.dev/favicon.svg",
   },
+  session:{
+    contractCalls:[
+      callPolicy({
+        address: CONTRACT_ADDRESS,
+        abi: ABI,
+        functionName: 'vote',
+      }),
+      callPolicy({
+        address: CONTRACT_ADDRESS,
+        abi: ABI,
+        functionName: 'createPoll',
+      })
+    ]
+  }
 
 })
 
