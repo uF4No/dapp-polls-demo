@@ -415,12 +415,27 @@ export async function usePollContract() {
     return poll
   }
   const vote = async (pollId: bigint, option: 1 | 2) => {
-    await writeContract(config, {
+    console.log('voting on poll:>> ', pollId, option)
+    const hash = await writeContract(config, {
       address: CONTRACT_ADDRESS,
       abi: ABI,
       functionName: 'vote',
       args: [pollId, option]
     })
+    console.log('vote tx hash:>> ', hash)
+
+    const receipt = await waitForTransactionReceipt(config, { 
+        hash,
+        timeout: 60_000 // 60 seconds timeout
+      })
+      
+      console.log('Transaction receipt:', receipt)
+      
+      if (receipt.status === 'reverted') {
+        throw new Error('Transaction reverted')
+      }
+
+      return receipt
   }
 
   return {
