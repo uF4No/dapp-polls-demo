@@ -4,6 +4,9 @@
 
 [Spanish version down below](#descripcion-general)
 
+- Try the demo without SSO:https://zk-polls.netlify.app/
+- Try the demo with SSO: https://zk-polls-sso.netlify.app/
+
 ## Overview
 
 This is a demo app for a ZKsync-based poll application. Connected accounts can create polls with two options and vote on them.
