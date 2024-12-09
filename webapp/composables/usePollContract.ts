@@ -1,11 +1,11 @@
 import { createPublicClient, http,  } from 'viem'
 import { zksyncSepoliaTestnet } from '@wagmi/core/chains'
-import {getAccount, writeContract, waitForTransactionReceipt} from "@wagmi/core"
+import { writeContract, waitForTransactionReceipt} from "@wagmi/core"
 import {config} from "../wagmi"
 
-const CONTRACT_ADDRESS = '0xe888F8eDfd68F66c2a10AB1da561Cacb99AD9293'
+export const CONTRACT_ADDRESS = '0xe888F8eDfd68F66c2a10AB1da561Cacb99AD9293'
 
-const ABI = [
+export const ABI = [
     {
       "type": "function",
       "name": "createPoll",
@@ -374,9 +374,7 @@ export async function usePollContract() {
         hash,
         timeout: 60_000 // 60 seconds timeout
       })
-      
-      console.log('Transaction receipt:', receipt)
-      
+            
       if (receipt.status === 'reverted') {
         throw new Error('Transaction reverted')
       }
