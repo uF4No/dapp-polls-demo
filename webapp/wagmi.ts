@@ -35,10 +35,10 @@ export const config = createConfig({
     ssoConnector,
     
   ],
-  // storage: createStorage({
-  //   storage: cookieStorage,
-  // }),
-  // ssr: true,
+  storage: createStorage({
+    storage: cookieStorage,
+  }),
+  ssr: true,
   transports: {
     [zksyncSepoliaTestnet.id]: http(),
     
