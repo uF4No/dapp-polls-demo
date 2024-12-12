@@ -12,6 +12,8 @@ interface Poll {
 }
 
 const route = useRoute()
+const account = useAccount()
+console.log('account:>> ', account)
 const { address } = useAccount()
 const pollContract = await usePollContract()
 const { data: poll, pending } = await useAsyncData<Poll>(
@@ -40,7 +42,9 @@ const vote = async (option: 1 | 2) => {
   loading.value = true
   error.value = ''
   
+
   try {
+    console.log('account:>> ', account)
     console.log(poll.value.owner.toLowerCase(), address.value?.toLowerCase())
     if (poll.value.owner.toLowerCase() === address.value?.toLowerCase()) {
       error.value = 'You cannot vote on your own poll.'
