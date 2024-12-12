@@ -2,8 +2,12 @@ import { createPublicClient, http,  } from 'viem'
 import { zksyncSepoliaTestnet } from '@wagmi/core/chains'
 import { writeContract, waitForTransactionReceipt} from "@wagmi/core"
 import {config} from "../wagmi"
+import { getGeneralPaymasterInput } from "viem/zksync"
 
 export const CONTRACT_ADDRESS = '0xe888F8eDfd68F66c2a10AB1da561Cacb99AD9293'
+
+// Paymaster contract deployed separately
+const PAYMASTER_ADDRESS = '0xA472f18E311e57ef644b80228dfff152F670D946'
 
 export const ABI = [
     {
@@ -365,7 +369,9 @@ export async function usePollContract() {
         address: CONTRACT_ADDRESS,
         abi: ABI,
         functionName: 'createPoll',
-        args: [title, optionOne, optionTwo, durationInMinutes]
+        args: [title, optionOne, optionTwo, durationInMinutes],
+        paymaster: PAYMASTER_ADDRESS,
+        paymasterInput: getGeneralPaymasterInput({ innerInput: "0x" })
       })
       
       console.log('Transaction hash:', hash)
@@ -418,7 +424,9 @@ export async function usePollContract() {
       address: CONTRACT_ADDRESS,
       abi: ABI,
       functionName: 'vote',
-      args: [pollId, option]
+      args: [pollId, option],
+      paymaster: PAYMASTER_ADDRESS,
+      paymasterInput: getGeneralPaymasterInput({ innerInput: "0x" })
     })
     console.log('vote tx hash:>> ', hash)
 
