@@ -24,8 +24,11 @@ const closeDropdown = () => {
 }
 
 const handleConnect = (connector: any) => {
-  connect({ connector, chainId })
-  closeDropdown()
+    console.log('connecting...')
+    connect({ connector, chainId })
+    closeDropdown()
+
+  // }
 }
 
 const navigateToAccount = () => {
